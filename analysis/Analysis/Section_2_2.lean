@@ -69,7 +69,10 @@ lemma Nat.add_succ (n m:Nat) : n + (m++) = (n + m)++ := by
 
 /-- n++ = n + 1 (Why?) -/
 theorem Nat.succ_eq_add_one (n:Nat) : n++ = n + 1 := by
-  sorry
+  revert n; apply induction
+  . rw [show 1=0++ from rfl, zero_add]
+  intro n ih
+  rw [succ_add, ih]
 
 /-- Proposition 2.2.4 (Addition is commutative) -/
 theorem Nat.add_comm (n m:Nat) : n + m = m + n := by
