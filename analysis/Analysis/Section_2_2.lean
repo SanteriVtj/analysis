@@ -155,7 +155,20 @@ extracts a witness `x` and a proof `hx : P x` of the property from a hypothesis 
 
 /-- Lemma 2.2.10 (unique predecessor) / Exercise 2.2.2 -/
 lemma Nat.uniq_succ_eq (a:Nat) (ha: a.isPos) : ∃! b, b++ = a := by
-  sorry
+  rw [isPos_iff] at ha
+  revert a; apply induction
+  . tauto
+  . intro n h h1
+    apply existsUnique_of_exists_of_unique
+    use n
+    intro m z h2 h3
+    apply succ_cancel at h2
+    apply succ_cancel at h3
+    rw [←h3] at h2
+    exact h2
+
+
+
 
 /-- Definition 2.2.11 (Ordering of the natural numbers) -/
 instance Nat.instLE : LE Nat where
