@@ -167,9 +167,6 @@ lemma Nat.uniq_succ_eq (a:Nat) (ha: a.isPos) : ∃! b, b++ = a := by
     rw [←h3] at h2
     exact h2
 
-
-
-
 /-- Definition 2.2.11 (Ordering of the natural numbers) -/
 instance Nat.instLE : LE Nat where
   le n m := ∃ a:Nat, m = n + a
@@ -205,7 +202,18 @@ example : (8:Nat) > 5 := by
   decide
 
 theorem Nat.succ_gt (n:Nat) : n++ > n := by
-  sorry
+  rw [Nat.gt_iff_lt, Nat.lt_iff]
+  constructor
+  . use 1
+    rw [←Nat.succ_eq_add_one]
+  revert n; apply induction
+  . intro h
+    symm at h
+    have : 0++ ≠ 0 := Nat.succ_ne 0
+    contradiction
+  intro h h1
+  apply Nat.succ_ne_succ
+  exact h1
 
 /-- Proposition 2.2.12 (Basic properties of order for natural numbers) / Exercise 2.2.3
 
