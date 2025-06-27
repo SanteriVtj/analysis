@@ -219,8 +219,10 @@ theorem Nat.succ_gt (n:Nat) : n++ > n := by
 
 (a) (Order is reflexive). -/
 theorem Nat.ge_refl (a:Nat) : a ≥ a := by
-  sorry
-
+  rw [Nat.ge_iff_le, Nat.le_iff_lt_or_eq]
+  by_cases h : a = a
+  . simp
+  contradiction
 /-- (b) (Order is transitive).  The `obtain` tactic will be useful here. -/
 theorem Nat.ge_trans {a b c:Nat} (hab: a ≥ b) (hbc: b ≥ c) : a ≥ c := by
   sorry
