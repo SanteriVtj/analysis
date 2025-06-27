@@ -239,11 +239,29 @@ theorem Nat.ge_trans {a b c:Nat} (hab: a ≥ b) (hbc: b ≥ c) : a ≥ c := by
 
 /-- (c) (Order is anti-symmetric)  -/
 theorem Nat.ge_antisymm {a b:Nat} (hab: a ≥ b) (hba: b ≥ a) : a = b := by
-  sorry
+  rw [Nat.ge_iff_le, Nat.le_iff] at hab
+  rw [Nat.ge_iff_le, Nat.le_iff] at hba
+  obtain ⟨ x, hx ⟩ := hab
+  obtain ⟨ y, hy ⟩ := hba
+  rw [hx] at hy
+  rw [Nat.add_assoc] at hy
+  nth_rewrite 1 [← Nat.add_zero b] at hy
+  apply Nat.add_cancel_left at hy
+  symm at hy
+  apply Nat.add_eq_zero at hy
+  have x_zero : x = 0 := hy.left
+  rw [x_zero] at hx
+  symm at hx
+  rw [Nat.add_zero] at hx
+  symm at hx
+  exact hx
+
 
 /-- (d) (Addition preserves order)  -/
 theorem Nat.add_ge_add_right (a b c:Nat) : a ≥ b ↔ a + c ≥ b + c := by
-  sorry
+  rw [Nat.ge_iff_le, Nat.le_iff]
+  by_cases h : a = b + a
+  .
 
 /-- (d) (Addition preserves order)  -/
 theorem Nat.add_ge_add_left (a b c:Nat) : a ≥ b ↔ c + a ≥ c + b := by
