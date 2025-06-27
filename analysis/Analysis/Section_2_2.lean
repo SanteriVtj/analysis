@@ -225,7 +225,17 @@ theorem Nat.ge_refl (a:Nat) : a ≥ a := by
   contradiction
 /-- (b) (Order is transitive).  The `obtain` tactic will be useful here. -/
 theorem Nat.ge_trans {a b c:Nat} (hab: a ≥ b) (hbc: b ≥ c) : a ≥ c := by
-  sorry
+  rw [Nat.ge_iff_le]
+  rw [Nat.ge_iff_le] at hab
+  rw [Nat.ge_iff_le] at hbc
+  rw [Nat.le_iff] at hab
+  rw [Nat.le_iff] at hbc
+  obtain ⟨ x, hx ⟩ := hab
+  obtain ⟨ y, hy ⟩ := hbc
+  rw [Nat.le_iff]
+  use (y+x)
+  rw [hx, hy]
+  rw [Nat.add_assoc]
 
 /-- (c) (Order is anti-symmetric)  -/
 theorem Nat.ge_antisymm {a b:Nat} (hab: a ≥ b) (hba: b ≥ a) : a = b := by
