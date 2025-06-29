@@ -256,12 +256,22 @@ theorem Nat.ge_antisymm {a b:Nat} (hab: a ≥ b) (hba: b ≥ a) : a = b := by
   symm at hx
   exact hx
 
-
 /-- (d) (Addition preserves order)  -/
 theorem Nat.add_ge_add_right (a b c:Nat) : a ≥ b ↔ a + c ≥ b + c := by
+  constructor
+  . intro h
+    obtain ⟨ x, hx ⟩ := h
+    rw [Nat.ge_iff_le, Nat.le_iff]
+    use x
+    rw [hx]
+    rw [Nat.add_assoc, Nat.add_comm x c, Nat.add_assoc]
+  intro h
+  rw [Nat.ge_iff_le, Nat.le_iff] at h
+  obtain ⟨ x, hx ⟩ := h
+  rw [Nat.add_comm a c, Nat.add_comm b c, Nat.add_assoc] at hx
+  apply Nat.add_cancel_left at hx
   rw [Nat.ge_iff_le, Nat.le_iff]
-  by_cases h : a = b + a
-  .
+  use x
 
 /-- (d) (Addition preserves order)  -/
 theorem Nat.add_ge_add_left (a b c:Nat) : a ≥ b ↔ c + a ≥ c + b := by
