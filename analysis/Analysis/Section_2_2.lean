@@ -286,7 +286,46 @@ theorem Nat.add_le_add_left (a b c:Nat) : a ≤ b ↔ c + a ≤ c + b := add_ge_
 
 /-- (e) a < b iff a++ ≤ b. -/
 theorem Nat.lt_iff_succ_le (a b:Nat) : a < b ↔ a++ ≤ b := by
-  sorry
+  rw [Nat.lt_iff]
+  constructor
+  intro h
+  let ⟨ ha, hb ⟩ := h
+  rw [Nat.le_iff]
+  obtain ⟨ x, hx ⟩ := ha
+  rw [hx] at hb
+  have xpos : x ≠ 0 := by
+    intro hpos
+    rw [hpos, Nat.add_zero] at hb
+    contradiction
+  rw [← Nat.isPos_iff] at xpos
+  apply Nat.uniq_succ_eq at xpos
+  apply ExistsUnique.exists at xpos
+  rw [hx]
+  obtain ⟨ y, hy ⟩ := xpos
+  rw [← hy, Nat.add_succ]
+  rw [Nat.add_comm, ← Nat.add_succ]
+  use y
+  rw [Nat.add_comm]
+  intro h
+  constructor
+  rw [Nat.le_iff] at h
+  obtain ⟨ x, hx ⟩ := h
+  use (x++)
+  rw [hx]
+  rw [Nat.add_comm, Nat.add_succ, Nat.add_comm, ← Nat.add_succ]
+  -- intro ha
+  rw [Nat.le_iff] at h
+  obtain ⟨ x, hx ⟩ := h
+  have bpz : b + 0 = b := by
+    rw [Nat.add_comm, Nat.zero_add]
+  intro ha
+  rw [Nat.add_comm, Nat.add_succ, Nat.add_comm, ← Nat.add_succ] at hx
+  rw [← bpz] at hx
+  rw [ha] at hx
+  apply Nat.add_cancel_left at hx
+  contradiction
+  -- rw [← Nat.add_comm, Nat.add_succ, Nat.add_comm, ← Nat.add_succ] at hx
+
 
 /-- (f) a < b if and only if b = a + d for positive d. -/
 theorem Nat.lt_iff_add_pos (a b:Nat) : a < b ↔ ∃ d:Nat, d.isPos ∧ b = a + d := by
