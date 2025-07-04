@@ -324,12 +324,30 @@ theorem Nat.lt_iff_succ_le (a b:Nat) : a < b ↔ a++ ≤ b := by
   rw [ha] at hx
   apply Nat.add_cancel_left at hx
   contradiction
-  -- rw [← Nat.add_comm, Nat.add_succ, Nat.add_comm, ← Nat.add_succ] at hx
-
 
 /-- (f) a < b if and only if b = a + d for positive d. -/
 theorem Nat.lt_iff_add_pos (a b:Nat) : a < b ↔ ∃ d:Nat, d.isPos ∧ b = a + d := by
-  sorry
+  rw [Nat.lt_iff_succ_le]
+  constructor
+  intro h
+  obtain ⟨ x, hx ⟩ := h
+  rw [Nat.succ_add, ← Nat.add_succ] at hx
+  use (x++)
+  constructor
+  rw [Nat.isPos_iff]
+  apply Nat.succ_ne
+  exact hx
+  intro h
+  obtain ⟨ x,hx ⟩ := h
+  let ⟨ ha, hb ⟩ := hx
+  apply Nat.uniq_succ_eq at ha
+  rw [Nat.le_iff]
+  apply ExistsUnique.exists at ha
+  obtain ⟨ c, hc ⟩ := ha
+  rw [← hc] at hb
+  use c
+  rw [Nat.succ_add, Nat.add_comm, ← Nat.succ_add, Nat.add_comm]
+  exact hb
 
 /-- If a < b then a ̸= b,-/
 theorem Nat.ne_of_lt (a b:Nat) : a < b → a ≠ b := by
