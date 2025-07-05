@@ -393,20 +393,32 @@ theorem Nat.trichotomous (a b:Nat) : a < b ∨ a = b ∨ a > b := by
 def Nat.le_dec : (a b : Nat) → Decidable (a ≤ b)
   | 0, b => by
     apply isTrue
-    sorry
+    rw [Nat.le_iff]
+    use b
+    rw [Nat.add_comm, Nat.add_zero]
   | a++, b => by
     cases le_dec a b with
     | isTrue h =>
       cases decEq a b with
       | isTrue h =>
         apply isFalse
-        sorry
+        intro ha
+        rw [Nat.le_iff] at ha
+        obtain ⟨ x, hx ⟩ := ha
+        have bpz : b + 0 = b := by
+          rw [Nat.add_comm, Nat.zero_add]
+        rw [← bpz] at hx
+        rw [Nat.succ_add, Nat.add_comm, ← Nat.add_succ, Nat.add_comm, h] at hx
+        apply Nat.add_cancel_left at hx
+        contradiction
       | isFalse h =>
-        apply isTrue
-        sorry
+      apply isTrue
+      rw [← Nat.lt_iff_succ_le, Nat.lt_iff, ← Nat.le_iff]
+      tauto
     | isFalse h =>
       apply isFalse
-      sorry
+      rw [← Nat.lt_iff_succ_le, Nat.lt_iff,← Nat.le_iff]
+      tauto
 
 instance Nat.decidableRel : DecidableRel (· ≤ · : Nat → Nat → Prop) := Nat.le_dec
 
