@@ -55,7 +55,6 @@ lemma Nat.mul_zero (n: Nat) : n * 0 = 0 := by
   rw [succ_mul, add_comm, zero_add]
   exact hind
 
-
 /-- This lemma will be useful to prove Lemma 2.3.2. -/
 lemma Nat.mul_succ (n m:Nat) : n * m++ = n * m + n := by
   revert n
@@ -68,12 +67,14 @@ lemma Nat.mul_succ (n m:Nat) : n * m++ = n * m + n := by
     _ = ha * m + (ha + m)++ := by rw [add_succ]
     _ = ha * m + (m + ha)++ := by rw [add_comm ha m]
   rw [add_assoc, add_succ m ha]
-  -- rw [add_assoc, add_succ, add_comm ha m]
-
 
 /-- Lemma 2.3.2 (Multiplication is commutative) / Exercise 2.3.1 -/
 lemma Nat.mul_comm (n m: Nat) : n * m = m * n := by
-  sorry
+  revert n
+  apply induction
+  . rw [mul_zero, zero_mul]
+  intro n hind
+  rw [mul_succ, succ_mul, hind]
 
 theorem Nat.mul_one (m: Nat) : m * 1 = m := by
   rw [mul_comm, one_mul]
